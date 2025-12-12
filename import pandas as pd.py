@@ -100,6 +100,21 @@ print("Confusion Matrix:\n", cm)
 
 # --- 5. Fungsi Prediksi (Demo) ---
 def predict_message(message_list):
+    # --- SAVE MODEL DAN CLI (Orang 3) ---
+import joblib
+
+joblib.dump(model, "spam_model.pkl")
+joblib.dump(vectorizer, "spam_vectorizer.pkl")
+
+def run_cli():
+    print("\n=== SISTEM DETEKSI SPAM CLI ===")
+    while True:
+        msg = input("Masukkan pesan ('exit' untuk keluar): ")
+        if msg.lower() == "exit":
+            break
+        vec = vectorizer.transform([msg])
+        pred = model.predict(vec)[0]
+        print("Hasil:", "SPAM" if pred == 1 else "AMAN")
     """Mengambil list pesan string dan memprediksi apakah itu aman (0) atau phishing (1)."""
     # Mengubah pesan baru menjadi fitur numerik
     new_features = vectorizer.transform(message_list)
@@ -125,4 +140,5 @@ predictions = predict_message(test_messages)
 for result in predictions:
 
     print(result)
+
 
