@@ -36,6 +36,22 @@ except Exception as e:
     print(f"❌ ERROR saat memproses data: {e}")
     exit()
 
+# --- PREPROCESSING TAMBAHAN (Orang 1) ---
+import re
+import nltk
+from nltk.stem import WordNetLemmatizer
+nltk.download('wordnet')
+
+lemmatizer = WordNetLemmatizer()
+
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r"http\S+|www\S+", "", text)
+    text = re.sub(r"[^a-zA-Z\s]", " ", text)
+    text = " ".join([lemmatizer.lemmatize(word) for word in text.split()])
+    return text
+
+df['Pesan'] = df['Pesan'].apply(clean_text)
 
 # --- 2. Pemrosesan Teks (NLP Preprocessing) ---
 # CountVectorizer akan mengubah teks menjadi vektor angka (Bag of Words)
@@ -98,4 +114,5 @@ test_messages = [
 
 predictions = predict_message(test_messages)
 for result in predictions:
+
     print(result)
