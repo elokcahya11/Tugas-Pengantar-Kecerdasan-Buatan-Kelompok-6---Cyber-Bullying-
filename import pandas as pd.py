@@ -76,8 +76,15 @@ print("Memulai Pelatihan Model Naïve Bayes...")
 print("=========================================")
 
 # MultinomialNB sangat cocok untuk masalah klasifikasi teks
-model = MultinomialNB()
-model.fit(X_train_features, y_train)
+# --- MODEL OPTIMIZATION (Orang 2) ---
+from sklearn.model_selection import GridSearchCV
+
+params = {"alpha": [0.1, 0.3, 0.5, 1.0]}
+grid = GridSearchCV(MultinomialNB(), params, cv=5, scoring="accuracy")
+grid.fit(X_train_features, y_train)
+
+model = grid.best_estimator_
+print("Model terbaik:", grid.best_params_)
 
 # --- 4. Evaluasi Model ---
 y_pred = model.predict(X_test_features)
@@ -87,7 +94,9 @@ print(f"✅ Pelatihan Selesai!")
 print(f"Akurasi Model pada data uji: {accuracy:.4f} ({accuracy*100:.2f}%)")
 print("\nLaporan Klasifikasi:")
 print(classification_report(y_test, y_pred, target_names=['Aman (0)', 'Berbahaya (1)']))
-
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", cm)
 
 # --- 5. Fungsi Prediksi (Demo) ---
 def predict_message(message_list):
@@ -116,3 +125,4 @@ predictions = predict_message(test_messages)
 for result in predictions:
 
     print(result)
+
