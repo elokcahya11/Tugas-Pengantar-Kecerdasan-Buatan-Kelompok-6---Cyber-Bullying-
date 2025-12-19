@@ -127,3 +127,37 @@ def predict_message(message_list):
         label = "SPAM" if pred == 1 else "AMAN"
         results.append(f"'{msg[:45]}...' -> {label}")
     return results
+
+
+# =========================================================
+# 8. DEMO PENGUJIAN MODEL
+# =========================================================
+print("\n=========================================")
+print("DEMO PENGUJIAN MODEL")
+print("=========================================")
+
+test_messages = [
+    "Selamat! Anda memenangkan hadiah uang 100 juta. Klik link ini sekarang!",
+    "Halo Andi, jangan lupa rapat jam 10 pagi besok.",
+    "URGENT! Your bank account has been compromised. Verify now!"
+]
+
+results = predict_message(test_messages)
+for r in results:
+    print(r)
+
+# =========================================================
+# 9. CLI SEDERHANA (OPSIONAL)
+# =========================================================
+def run_cli():
+    print("\n=== SISTEM DETEKSI SPAM (CLI) ===")
+    while True:
+        msg = input("Masukkan pesan ('exit' untuk keluar): ")
+        if msg.lower() == "exit":
+            break
+        vec = vectorizer.transform([msg])
+        pred = model.predict(vec)[0]
+        print("Hasil:", "SPAM" if pred == 1 else "AMAN")
+
+# Uncomment jika ingin menjalankan CLI
+# run_cli()
